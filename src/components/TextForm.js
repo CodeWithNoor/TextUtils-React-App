@@ -66,9 +66,14 @@ export default function TextForm(props) {
 
     // ****** Copy Text **********
     const handleCopy = ()=>{
-        var text = document.getElementById("textArea");
-        text.select();
-        navigator.clipboard.writeText(text.value);
+        // var text = document.getElementById("textArea");
+        // text.select();
+
+        // The Selection.removeAllRanges() method removes all ranges from the selection, leaving the anchorNode and focusNode properties equal to null and leaving nothing selected.
+        //  document.getSelection().removeAllRanges(); 
+        
+        // navigator.clipboard.writeText(text.value);
+        navigator.clipboard.writeText(text);
         props.showAlert("Copied to clipboard", "success");
 
     };
@@ -83,26 +88,30 @@ export default function TextForm(props) {
     
     return (
         <>
-        <div className='container my-4' style={{color: props.mode === 'dark' ? 'white' : 'black'}}>
+        <div className='container my-2' style={{color: props.mode === 'dark' ? 'white' : 'black'}}>
             <h3>{props.heading}</h3>
             <div className="mb-4" />
-            <textarea className="form-control my-3" style={{backgroundColor: props.mode === 'dark' ? '#212529' : 'white', color: props.mode === 'dark' ? 'white' : 'black'}} value={text} onChange={handleonClick} id="textArea" rows="6"></textarea>
-            <button type="button" className="btn btn-dark btn-sm mx-2 text-light " onClick={handleUpperClick} >Convert to Upper Case</button>
-            <button type="button" className="btn btn-dark btn-sm mx-2 text-light" onClick={handleLowerClick} >Convert to Lower Case</button>
-            <button type="button" className="btn btn-dark btn-sm mx-2 text-light" onClick={handleSubmitClick} >Submit</button>
-            <button type="button" className="btn btn-dark btn-sm mx-2 text-light" onClick={handleClearClick} >Clear Text</button>
-            <button type="button" className="btn btn-dark btn-sm mx-2 text-light" onClick={handleCopy} >Copy Text</button>
-            <button type="button" className="btn btn-dark btn-sm mx-2 text-light" onClick={handlerRemoveSpaces}>Remove Extra Spaces</button>
+            <textarea className="form-control my-2" style={{backgroundColor: props.mode === 'dark' ? '#212529' : 'white', color: props.mode === 'dark' ? 'white' : 'black'}} value={text} onChange={handleonClick} id="textArea" rows="6"></textarea>
+            <button type="button" disabled = {text.length === 0} className="btn btn-dark btn-sm mx-2 my-1 text-light " onClick={handleUpperClick} >Convert to Upper Case</button>
+            <button type="button" disabled = {text.length === 0} className="btn btn-dark btn-sm mx-2 my-1 text-light" onClick={handleLowerClick} >Convert to Lower Case</button>
+            <button type="button" disabled = {text.length === 0} className="btn btn-dark btn-sm mx-2 my-1 text-light" onClick={handleSubmitClick} >Submit</button>
+            <button type="button" disabled = {text.length === 0} className="btn btn-dark btn-sm mx-2 my-1 text-light" onClick={handleClearClick} >Clear Text</button>
+            <button type="button" disabled = {text.length === 0} className="btn btn-dark btn-sm mx-2 my-1 text-light" onClick={handleCopy} >Copy Text</button>
+            <button type="button" disabled = {text.length === 0} className="btn btn-dark btn-sm mx-2 my-1 text-light" onClick={handlerRemoveSpaces}>Remove Extra Spaces</button>
         </div>
 
         {/* ************************************** Add more logics ***************************************** */}
         <div className="container my-3" style={{ color: props.mode === 'dark' ? 'white' : 'black'}}>
         <h3>Your Text Summary...</h3>
-        <p> <b>{text.split(" ").length}</b> words and <b>{text.length}</b> characters</p>
-        <p><b>{0.069 * text.split(" ").length}</b> minutes read</p>
+
+        {/* \s ---> including new lines */}
+        {/* input string to count the number of words as every word in a sentence is separated by a space. */}
+
+        <p> <b>{text.split(/\s+/).filter((element) => { return element.length !== 0 }).length}</b> words and <b>{text.length}</b> characters</p>
+        <p><b>{0.069 * text.split(" ").filter((element) => { return element.length !== 0 }).length}</b> minutes read</p> 
 
         <h2>Preview</h2>
-        <p>{text.length>0 ? text : "Enter something in the textbox above to preview its here..."}</p>
+        <p>{text.length>0 ? text : "State Of Components || Nothing to preview......"}</p>
         </div>
         </>
     );
